@@ -7,3 +7,4 @@ staticfiles
 .idea/vcs.xml
 *.xml
 *.sqlite3
+db.sqlite3
