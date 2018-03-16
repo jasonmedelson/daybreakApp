@@ -15,6 +15,9 @@
                 </div>
                 <input class="d-block mx-auto my-auto" type="submit" value="Search">
                 </form>
+                {% if submitted %}
+                    <h3>links recieved</h3>
+                {% endif %}
 
             {% else %}
                 <h1 class="d-block text-center mt-4">Please Login</h1>
