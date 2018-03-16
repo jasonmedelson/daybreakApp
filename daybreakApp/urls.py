@@ -15,8 +15,19 @@ Including another URLconf
 """
 
 from django.contrib import admin
+from django.conf.urls import url
 from django.urls import path
+from django.urls import include
+from django.views.generic import RedirectView
+from django.conf import settings
+from django.contrib.auth import views as auth_views
+from mainApp import views as core_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('mainApp/', include('mainApp.urls')),
+    url(r'^login/$', auth_views.login, name='login'),
+    url(r'^logout/$', auth_views.logout, name='logout'),
+    url(r'^signup/$', core_views.signup, name='signup'),
+    path('', RedirectView.as_view(url='/mainApp/', permanent=True)),
 ]
