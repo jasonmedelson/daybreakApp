@@ -6,3 +6,4 @@ staticfiles
 *.xml
 .idea/vcs.xml
 *.xml
+*.sqlite3
