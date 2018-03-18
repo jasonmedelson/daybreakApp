@@ -9,4 +9,3 @@ class twitterLinks(models.Model):
     likes = models.IntegerField()
     quote = models.TextField()
     user = models.ForeignKey(User,on_delete=models.CASCADE,)
-

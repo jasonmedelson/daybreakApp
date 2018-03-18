@@ -139,5 +139,3 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 django_heroku.settings(locals())
 
 LOGIN_REDIRECT_URL = 'index'
-
-
