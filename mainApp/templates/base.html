@@ -40,7 +40,7 @@
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item" href="{% url 'index' %}">Twitter</a>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">Youtube</a>
+                    <a class="dropdown-item" href="{% url 'yt' %}">Youtube</a>
                   </div>
                 </li>
                 <li class="nav-item dropdown mr-4">
@@ -50,7 +50,7 @@
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item" href="{% url 'data' %}">Twitter-Data</a>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">Youtube-Data</a>
+                    <a class="dropdown-item" href="{% url 'ytdata' %}">Youtube-Data</a>
                   </div>
                 </li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'logout'%}?next=/mainApp/"> Logout</a></li>
