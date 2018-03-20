@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 import requests
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
-from mainApp.models import twitterLinks
+from mainApp.models import twitterLinks, youtubeLinks
 # Create your views here.
 
 def index(request):
@@ -12,6 +12,13 @@ def index(request):
         request,
         './index.html'
     )
+
+def yt(request):
+    return render(
+        request,
+        './yt.html'
+    )
+
 def data(request):
     username = None
     if request.user.is_authenticated:
@@ -38,6 +45,35 @@ def data(request):
     return render(
         request,
         './data.html',
+        context={'info':zipped}
+    )
+
+def ytdata(request):
+    username = None
+    if request.user.is_authenticated:
+        username = request.user
+        userid = request.user.id
+    all_videos = youtubeLinks.objects.filter(user = userid)
+    link = []
+    name = []
+    profiles = []
+    timestamp = []
+    view = []
+    viewdate = []
+    try:
+        for number in range(len(all_videos)):
+            timestamp.append(all_videos[number].post_date)
+            name.append(all_videos[number].influencer)
+            link.append(all_videos[number].videourl)
+            view.append(all_videos[number].views)
+            viewdate.append(all_videos[number].viewsdate)
+            profiles.append(all_videos[number].channelurl)
+    except:
+        print("nothing found")
+    zipped = zip(timestamp, name, link, profiles, view, viewdate)
+    return render(
+        request,
+        './ytdata.html',
         context={'info':zipped}
     )
 
@@ -120,6 +156,72 @@ def search(request):
         './index.html',
         context={'submitted':True}
     )
+
+def ytsearch(request):
+    username = None
+    if request.user.is_authenticated:
+        username = request.user
+        userid = request.user.id
+        try:
+            to_remove = youtubeLinks.objects.filter(user=userid)
+            to_remove.delete()
+        except:
+            print("No videos deleted")
+    if 'q' in request.GET:
+        parse = request.GET['q']
+        sort = parse.split("https")
+        num = len(sort)
+        link = ""
+        name = ""
+        profiles = ""
+        timestamp = ""
+        view = 0
+        for link in range(1, num):
+            url = "https"
+            try:
+                url += sort[link]
+                # req = urlreq.urlopen(url)
+                url = url[:len(url) - 2]
+                link = url
+                req = requests.get(url, verify=False)
+                soup = BeautifulSoup(req.content)
+                name = soup.find_all("div", {"class": "yt-user-info"})
+                name = name[0].text.strip()
+                view = soup.find_all("div", {"class": "watch-view-count"})
+                view = view[0].text.strip()
+                view = view.split(" ")
+                view = view[0]
+                view = view.replace(",", "")
+                view = int(view)
+                timestamp = soup.find_all("div", {"id": "watch-uploader-info"})
+                timestamp = timestamp[0].text.strip()
+                try:
+                    timestamp = timestamp.split("on ")
+                    timestamp = timestamp[1]
+                except:
+                    timestamp = timestamp
+                profiles = soup.find_all("div", {"class": "yt-user-info"})
+                profiles = profiles[0].find_all("a")
+                profiles = profiles[0]['href'].strip()
+                profiles = "youtube.com" + profiles
+            except:
+                link = ""
+                name = ""
+                profiles = ""
+                timestamp = ""
+                view = 0
+            ytInfo = youtubeLinks(post_date=timestamp, influencer=name, videourl=link,
+                                  channelurl=profiles, views=view, user=username)
+            ytInfo.save()
+    else:
+        message = 'You submitted an empty form.'
+        return HttpResponse(message)
+    return render(
+        request,
+        './index.html',
+        context={'submitted': True}
+    )
+
 
 def signup(request):
     if request.method == 'POST':

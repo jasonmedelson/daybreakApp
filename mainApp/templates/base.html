@@ -33,7 +33,26 @@
               </li>
               {% if user.is_authenticated %}
                 <li class="nav-item mr-4"><a class="nav-link" href="{% url 'index' %}"> {{ user.get_username }} </a> </li>
-                <li class="nav-item mr-4"><a class="nav-link" href="{% url 'data' %}">Data</a> </li>
+                <li class="nav-item dropdown mr-4">
+                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Sites
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="{% url 'index' %}">Twitter</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#">Youtube</a>
+                  </div>
+                </li>
+                <li class="nav-item dropdown mr-4">
+                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Data
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="{% url 'data' %}">Twitter-Data</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#">Youtube-Data</a>
+                  </div>
+                </li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'logout'%}?next=/mainApp/"> Logout</a></li>
               {% else %}
                 <li class="nav-item"><a class="nav-link" href="{% url 'login'%}?next={{request.path}}">Login</a></li>
